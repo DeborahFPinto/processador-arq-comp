@@ -26,7 +26,7 @@ begin
 	
 	-- soma subtração and or
 	soma <= ('0' & entrada_a) + ('0' & entrada_b);
-	sub <= ('0' & entrada_a) - ('0' & entrada_b);
+	sub <= ('0' & entrada_b) - ('0' & entrada_a);
 	s_and <= entrada_a and entrada_b;
 	s_or <= entrada_a or entrada_b;
 	

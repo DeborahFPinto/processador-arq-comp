@@ -28,9 +28,9 @@ architecture a_banco_regs of banco_regs is
             data_out : out unsigned(15 downto 0)
         );
     end component;
- 
-	signal r0_out, r1_out, r2_out, r3_out, r4_out : unsigned(15 downto 0); -- sinal saida dos regs
-	signal r0_en, r1_en, r2_en, r3_en, r4_en : std_logic; -- enable dos regs
+	-- adicao de um 5 reg para cumprir com C D F
+	signal r0_out, r1_out, r2_out, r3_out, r4_out, r5_out : unsigned(15 downto 0); -- sinal saida dos regs
+	signal r0_en, r1_en, r2_en, r3_en, r4_en, r5_en : std_logic; -- enable dos regs
 	
 begin 
 	
@@ -39,6 +39,7 @@ begin
 	r2_en <= '1' when (wr_en = '1' and reg_sel_write = "010") else '0';
 	r3_en <= '1' when (wr_en = '1' and reg_sel_write = "011") else '0';
 	r4_en <= '1' when (wr_en = '1' and reg_sel_write = "100") else '0';
+	r5_en <= '1' when (wr_en = '1' and reg_sel_write = "101") else '0';
 	
 	-- instanciação
 	r0: reg16bits port map(clk => clk, rst => rst, wr_en => r0_en, data_in => data_in, data_out => r0_out);
@@ -46,12 +47,14 @@ begin
 	r2: reg16bits port map(clk => clk, rst => rst, wr_en => r2_en, data_in => data_in, data_out => r2_out);
 	r3: reg16bits port map(clk => clk, rst => rst, wr_en => r3_en, data_in => data_in, data_out => r3_out);
 	r4: reg16bits port map(clk => clk, rst => rst, wr_en => r4_en, data_in => data_in, data_out => r4_out);
+	r5: reg16bits port map(clk => clk, rst => rst, wr_en => r5_en, data_in => data_in, data_out => r5_out);
 	
 	data_out <= r0_out when reg_sel_read = "000" else
 				r1_out when reg_sel_read = "001" else
 				r2_out when reg_sel_read = "010" else
 				r3_out when reg_sel_read = "011" else
 				r4_out when reg_sel_read = "100" else
+				r5_out when reg_sel_read = "101" else
 				x"0000";
 
 end architecture;
