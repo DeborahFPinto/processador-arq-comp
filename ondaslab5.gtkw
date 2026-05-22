@@ -1,0 +1,37 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Fri May 22 12:17:29 2026
+[*]
+[dumpfile] "D:\HiTech\processador-arq-comp\src\sim.vcd"
+[dumpfile_mtime] "Fri May 22 12:14:16 2026"
+[dumpfile_size] 30865
+[savefile] "D:\HiTech\processador-arq-comp\src\ondaslab5.gtkw"
+[timestart] 0
+[size] 1920 1057
+[pos] -191 -191
+*-30.172039 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] processador_tb.
+[treeopen] processador_tb.uut.
+[sst_width] 197
+[signals_width] 150
+[sst_expanded] 1
+[sst_vpaned_height] 645
+@25
+processador_tb.rst
+processador_tb.clk
+processador_tb.uut.controle.estado_out[1:0]
+processador_tb.uut.controle.pc_out[6:0]
+processador_tb.uut.controle.instr_out[18:0]
+processador_tb.uut.ula_processador.flag_c
+processador_tb.uut.ula_processador.flag_n
+processador_tb.uut.ula_processador.flag_z
+processador_tb.uut.ula_processador.saida[15:0]
+processador_tb.uut.acumulador_ula.data_out[15:0]
+processador_tb.uut.banco.r0_out[15:0]
+processador_tb.uut.banco.r1_out[15:0]
+processador_tb.uut.banco.r2_out[15:0]
+processador_tb.uut.banco.r3_out[15:0]
+processador_tb.uut.banco.r4_out[15:0]
+processador_tb.uut.banco.r5_out[15:0]
+[pattern_trace] 1
+[pattern_trace] 0

@@ -1,0 +1,34 @@
+v 4
+file . "uc_tb.vhd" "e46891e028538b9b7a5bd12f51f57765311d0072" "20260522131402.766":
+  entity uc_tb at 1( 0) + 0 on 459;
+  architecture a_uc_tb of uc_tb at 8( 106) + 0 on 460;
+file . "processador_tb.vhd" "7850634030684ea22fe255bc687fbc9e4126f5bd" "20260522131402.762":
+  entity processador_tb at 1( 0) + 0 on 451;
+  architecture a_processador_tb of processador_tb at 8( 115) + 0 on 452;
+file . "toplevel_tb.vhd" "ef24d72e8d8c404308655b27fb8d03cc3b06fd4b" "20260522120355.471":
+  entity toplevel_tb at 1( 0) + 0 on 309;
+  architecture a_toplevel_tb of toplevel_tb at 8( 112) + 0 on 310;
+file . "uc.vhd" "dc8f6e8ce51d65c8124cab5bc108083cd131b4c7" "20260522131402.765":
+  entity uc at 1( 0) + 0 on 457;
+  architecture a_uc of uc at 19( 561) + 0 on 458;
+file . "ula.vhd" "87ec247bd1407becfdfcff4cfbb7bf53115baa22" "20260522131402.766":
+  entity ula at 1( 0) + 0 on 461;
+  architecture a_ula of ula at 19( 451) + 0 on 462;
+file . "reg16bits.vhd" "555252ebe2d9f0c7cc81d0f59e2beba39237e2ce" "20260522131402.763":
+  entity reg16bits at 1( 0) + 0 on 453;
+  architecture a_reg16bits of reg16bits at 15( 273) + 0 on 454;
+file . "banco_regs.vhd" "b51a112b66a18d78676fb85d84127e7e7dac6c38" "20260522131402.751":
+  entity banco_regs at 1( 0) + 0 on 447;
+  architecture a_banco_regs of banco_regs at 20( 390) + 0 on 448;
+file . "rom.vhd" "d77a894711329c9ab5395443fedef7c2f73b4872" "20260522131402.764":
+  entity rom at 1( 0) + 0 on 455;
+  architecture a_rom of rom at 13( 241) + 0 on 456;
+file . "toplevel.vhd" "ef5386bfe3ca812d79dca396c7fbd9e331f89c2d" "20260522120354.929":
+  entity toplevel at 1( 0) + 0 on 307;
+  architecture a_toplevel of toplevel at 14( 311) + 0 on 308;
+file . "processador.vhd" "bc27414d0ca5c0ca1d08c5a9a315a9527f236843" "20260522131402.752":
+  entity processador at 1( 0) + 0 on 449;
+  architecture a_processador of processador at 14( 314) + 0 on 450;
+file . "ula_tb.vhd" "5ca92b6913663104c672e6ac4feced7340677bf8" "20260522131402.767":
+  entity ula_tb at 1( 0) + 0 on 463;
+  architecture a_ula_tb of ula_tb at 8( 107) + 0 on 464;
