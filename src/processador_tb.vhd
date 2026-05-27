@@ -50,7 +50,7 @@ begin
         wait for 200 ns;
         rst <= '0';
         
-        wait for 15000 ns; 
+        wait for 110000 ns; 
 
         finished <= '1';
         wait;

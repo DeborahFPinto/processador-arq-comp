@@ -4,7 +4,8 @@ use ieee.numeric_std.all;
 
 entity uc is
     port(
-        clk, rst          : in std_logic;
+        clk, rst               : in std_logic;
+        flag_z, flag_n, flag_c : in std_logic;
         pc_out            : out unsigned(6 downto 0);
         instr_out         : out unsigned(18 downto 0);
         estado_out        : out unsigned(1 downto 0);
@@ -12,7 +13,8 @@ entity uc is
         wr_en_acumulador  : out std_logic;
         mux_ula_b         : out std_logic;
         selec_op_ula      : out unsigned(1 downto 0);
-        wr_en_banco       : out std_logic
+        wr_en_banco       : out std_logic;
+        wr_en_flags       : out std_logic
     );
 end entity;
 
@@ -84,9 +86,16 @@ begin
                    '1' when sinal_opcode = "0011" else
                    '0';
 
-    -- PC
+    wr_en_flags <= '0' when estado_s /= "10" else
+                   '1' when sinal_opcode = "0100" or sinal_opcode = "0101" or sinal_opcode = "0110" else
+                   '0';
+
+    -- PC implementar os saltos
     pc_inc <= reg_pc + 1;
-    next_pc <= reg_instr(6 downto 0) when (estado_s = "10" and sinal_opcode = "0111") else
+    
+    next_pc <= reg_pc + reg_instr(6 downto 0) when (estado_s = "10" and sinal_opcode = "0111") else -- JMP relativo
+               reg_instr(6 downto 0) when (estado_s = "10" and sinal_opcode = "1000" and (flag_z = '1' or flag_c = '1')) else -- BLS relativo
+               reg_instr(6 downto 0) when (estado_s = "10" and sinal_opcode = "1001" and flag_n = '1') else -- BMI relativo
                pc_inc when (estado_s = "10") else
                reg_pc; 
 
