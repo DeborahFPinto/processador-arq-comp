@@ -14,7 +14,9 @@ entity uc is
         mux_ula_b         : out std_logic;
         selec_op_ula      : out unsigned(1 downto 0);
         wr_en_banco       : out std_logic;
-        wr_en_flags       : out std_logic
+        wr_en_flags       : out std_logic;
+        wr_en_ram : out std_logic;
+        mux_banco: out std_logic
     );
 end entity;
 
@@ -89,6 +91,10 @@ begin
     wr_en_flags <= '0' when estado_s /= "10" else
                    '1' when sinal_opcode = "0100" or sinal_opcode = "0101" or sinal_opcode = "0110" else
                    '0';
+
+    wr_en_ram <= '1' when estado_s = "10" and sinal_opcode = "1011" else '0';
+    
+    mux_banco <= '1' when sinal_opcode = "1010" else '0';
 
     -- PC implementar os saltos
     pc_inc <= reg_pc + 1;
