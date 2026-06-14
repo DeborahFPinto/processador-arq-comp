@@ -6,17 +6,18 @@ entity uc is
     port(
         clk, rst               : in std_logic;
         flag_z, flag_n, flag_c : in std_logic;
-        pc_out            : out unsigned(6 downto 0);
-        instr_out         : out unsigned(18 downto 0);
-        estado_out        : out unsigned(1 downto 0);
-        mux_acumulador    : out std_logic;
-        wr_en_acumulador  : out std_logic;
-        mux_ula_b         : out std_logic;
-        selec_op_ula      : out unsigned(1 downto 0);
-        wr_en_banco       : out std_logic;
-        wr_en_flags       : out std_logic;
-        wr_en_ram : out std_logic;
-        mux_banco: out std_logic
+
+        uc_pc_out            : out unsigned(6 downto 0);
+        uc_instr_out         : out unsigned(18 downto 0);
+        uc_estado_out        : out unsigned(1 downto 0);
+        uc_mux_acumulador_cte    : out std_logic;
+        uc_wr_en_acumulador  : out std_logic;
+        uc_mux_ula_banco_ram : out std_logic;
+        uc_ula_selec_op      : out unsigned(1 downto 0);
+        uc_wr_en_banco       : out std_logic;
+        uc_wr_en_flags       : out std_logic;
+        uc_wr_en_ram : out std_logic;
+        uc_mux_acumulador_ram: out std_logic
     );
 end entity;
 
@@ -52,7 +53,7 @@ begin
             end if;
         end if;
     end process;
-    estado_out <= estado_s;
+    uc_estado_out <= estado_s;
 
     -- Registrador de Instrução
     proximo_reg_instr <= sinal_dado when estado_s = "01" else reg_instr;
@@ -67,34 +68,34 @@ begin
     sinal_opcode <= reg_instr(18 downto 15);
 
     -- Decodificador
-    mux_acumulador <= '1' when estado_s /= "10" else
+    uc_mux_acumulador_cte <= '1' when estado_s /= "10" else
                       '1' when sinal_opcode = "0001" else
                       '0' when sinal_opcode = "0100" or sinal_opcode = "0101" or sinal_opcode = "0110" else
                       '1';
 
-    wr_en_acumulador <= '0' when estado_s /= "10" else
-                        '1' when sinal_opcode = "0001" or sinal_opcode = "0100" or sinal_opcode = "0101" or sinal_opcode = "0110" else
+    uc_wr_en_acumulador <= '0' when estado_s /= "10" else
+                        '1' when sinal_opcode = "0001" or sinal_opcode = "0100" or sinal_opcode = "0101" or sinal_opcode = "0110" or sinal_opcode = "1010" else
                         '0';
 
-    mux_ula_b <= '0' when estado_s /= "10" else
+    uc_mux_ula_banco_ram <= '0' when estado_s /= "10" else
                   '1' when sinal_opcode = "0001" or sinal_opcode = "0110" else
                   '0';
 
-    selec_op_ula <= "00" when estado_s /= "10" or sinal_opcode = "0001" or sinal_opcode = "0011" or sinal_opcode = "0100" or sinal_opcode = "0110" else
+    uc_ula_selec_op <= "00" when estado_s /= "10" or sinal_opcode = "0001" or sinal_opcode = "0011" or sinal_opcode = "0100" or sinal_opcode = "0110" else
                      "01" when sinal_opcode = "0101" else
                      "00";
 
-    wr_en_banco <= '0' when estado_s /= "10" else
+    uc_wr_en_banco <= '0' when estado_s /= "10" else
                    '1' when sinal_opcode = "0011" else
                    '0';
 
-    wr_en_flags <= '0' when estado_s /= "10" else
+    uc_wr_en_flags <= '0' when estado_s /= "10" else
                    '1' when sinal_opcode = "0100" or sinal_opcode = "0101" or sinal_opcode = "0110" else
                    '0';
 
-    wr_en_ram <= '1' when estado_s = "10" and sinal_opcode = "1011" else '0';
+    uc_wr_en_ram <= '1' when estado_s = "10" and sinal_opcode = "1011" else '0';
     
-    mux_banco <= '1' when sinal_opcode = "1010" else '0';
+    uc_mux_acumulador_ram <= '1' when sinal_opcode = "1010" else '0';
 
     -- PC implementar os saltos
     pc_inc <= reg_pc + 1;
@@ -114,8 +115,8 @@ begin
         end if;
     end process;
 
-    pc_out <= reg_pc;
-    instr_out <= reg_instr;
-    estado_out <= estado_s;
+    uc_pc_out <= reg_pc;
+    uc_instr_out <= reg_instr;
+    uc_estado_out <= estado_s;
 
 end architecture;

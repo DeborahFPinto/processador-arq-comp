@@ -7,8 +7,8 @@ entity reg16bits is
 		clk : in std_logic;
 		rst : in std_logic;
 		wr_en : in std_logic;
-		data_in : in unsigned(15 downto 0);
-		data_out : out unsigned(15 downto 0)
+		reg_data_in : in unsigned(15 downto 0);
+		reg_data_out : out unsigned(15 downto 0)
 	);
 end entity;
 
@@ -21,10 +21,10 @@ begin
 			registro <= x"0000";
 		elsif wr_en='1' then 
 			if rising_edge(clk) then
-				registro <= data_in;
+				registro <= reg_data_in;
 			end if;
 		end if;
 	end process;
 	
-	data_out <= registro;
+	reg_data_out <= registro;
 end architecture;

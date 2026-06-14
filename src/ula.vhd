@@ -4,11 +4,11 @@ use ieee.numeric_std.all;
 
 entity ula is
 	port (
-		entrada_a : in unsigned(15 downto 0);
-		entrada_b : in unsigned(15 downto 0);
-		selec_op : in unsigned(1 downto 0);
+		ula_entrada_acumulador : in unsigned(15 downto 0);
+		ula_entrada_banco_ram : in unsigned(15 downto 0);
+		ula_selec_op : in unsigned(1 downto 0);
 		
-		saida : out unsigned(15 downto 0);
+		ula_saida : out unsigned(15 downto 0);
 		
 		flag_c : out std_logic; -- CarryOut -> relativo a BLS
 		flag_z : out std_logic; -- Zero -> relativo a BLS
@@ -25,22 +25,22 @@ architecture a_ula of ula is
 begin	
 	
 	-- soma subtração and or
-	soma <= ('0' & entrada_a) + ('0' & entrada_b);
-	sub <= ('0' & entrada_b) - ('0' & entrada_a);
-	s_and <= entrada_a and entrada_b;
-	s_or <= entrada_a or entrada_b;
+	soma <= ('0' & ula_entrada_acumulador) + ('0' & ula_entrada_banco_ram);
+	sub <= ('0' & ula_entrada_banco_ram) - ('0' & ula_entrada_acumulador);
+	s_and <= ula_entrada_acumulador and ula_entrada_banco_ram;
+	s_or <= ula_entrada_acumulador or ula_entrada_banco_ram;
 	
-	saida_interna <= soma(15 downto 0) when selec_op = "00" else
-					 sub(15 downto 0) when selec_op = "01" else
-					 s_and when selec_op = "10" else
-					 s_or when selec_op = "11" else
+	saida_interna <= soma(15 downto 0) when ula_selec_op = "00" else
+					 sub(15 downto 0) when ula_selec_op = "01" else
+					 s_and when ula_selec_op = "10" else
+					 s_or when ula_selec_op = "11" else
 					 x"0000";
 	
-	saida <= saida_interna;
+	ula_saida <= saida_interna;
 	
 	-- CarryOut
-	flag_c <= soma(16) when selec_op = "00" else
-			  sub(16) when selec_op = "01" else
+	flag_c <= soma(16) when ula_selec_op = "00" else
+			  sub(16) when ula_selec_op = "01" else
 			  '0';
 	
 	-- Zero

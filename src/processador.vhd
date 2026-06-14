@@ -15,27 +15,28 @@ architecture a_processador of processador is
 
     component uc is
         port(
-            clk, rst : in std_logic;
+            clk, rst               : in std_logic;
             flag_z, flag_n, flag_c : in std_logic;
-            pc_out : out unsigned(6 downto 0);
-            instr_out : out unsigned(18 downto 0);
-            estado_out : out unsigned(1 downto 0);
-            mux_acumulador : out std_logic;
-			wr_en_acumulador : out std_logic;
-            mux_ula_b : out std_logic;
-            selec_op_ula : out unsigned(1 downto 0);
-            wr_en_banco : out std_logic;
-            wr_en_flags : out std_logic;
-            wr_en_ram : out std_logic;
-            mux_banco : out std_logic
+
+            uc_pc_out            : out unsigned(6 downto 0);
+            uc_instr_out         : out unsigned(18 downto 0);
+            uc_estado_out        : out unsigned(1 downto 0);
+            uc_mux_acumulador_cte    : out std_logic;
+            uc_wr_en_acumulador  : out std_logic;
+            uc_mux_ula_banco_ram : out std_logic;
+            uc_ula_selec_op      : out unsigned(1 downto 0);
+            uc_wr_en_banco       : out std_logic;
+            uc_wr_en_flags       : out std_logic;
+            uc_wr_en_ram : out std_logic;
+            uc_mux_acumulador_ram: out std_logic
         );
     end component;
 
     component ula is
         port(
-            entrada_a, entrada_b : in unsigned(15 downto 0);
-            selec_op : in unsigned(1 downto 0);
-            saida : out unsigned(15 downto 0);
+            ula_entrada_acumulador, ula_entrada_banco_ram : in unsigned(15 downto 0);
+            ula_selec_op : in unsigned(1 downto 0);
+            ula_saida : out unsigned(15 downto 0);
             flag_c, flag_z, flag_n : out std_logic
         );
     end component;
@@ -45,8 +46,8 @@ architecture a_processador of processador is
             clk, rst : in std_logic;
             wr_en : in std_logic;
             reg_sel_read, reg_sel_write : in unsigned(2 downto 0);
-            data_in : in unsigned(15 downto 0);
-            data_out : out unsigned(15 downto 0)
+            br_data_in : in unsigned(15 downto 0);
+            br_data_out : out unsigned(15 downto 0)
         );
     end component;
 
@@ -54,8 +55,8 @@ architecture a_processador of processador is
         port (
             clk, rst : in std_logic;
             wr_en : in std_logic;
-            data_in : in unsigned(15 downto 0);
-            data_out : out unsigned(15 downto 0)
+            reg_data_in : in unsigned(15 downto 0);
+            reg_data_out : out unsigned(15 downto 0)
         );
     end component;
 
@@ -64,8 +65,8 @@ architecture a_processador of processador is
             clk: in std_logic;
             endereco: in unsigned (6 downto 0);
             wr_en: in std_logic;
-            dado_in: in unsigned(15 downto 0);
-            dado_out: out unsigned(15 downto 0)
+            ram_dado_in: in unsigned(15 downto 0);
+            ram_dado_out: out unsigned(15 downto 0)
         );
     end component; 
 
@@ -86,6 +87,7 @@ architecture a_processador of processador is
     signal s_wr_ram, s_mux_banco : std_logic;
     signal s_dado_out_ram : unsigned(15 downto 0);
     signal s_dado_banco : unsigned(15 downto 0);
+    signal s_dado_para_acumulador : unsigned(15 downto 0);
 
 begin 
     -- pega os 12 MSB da instrução e ajusta p/16 com sinal
@@ -97,20 +99,21 @@ begin
         flag_z => reg_flag_z, 
         flag_n => reg_flag_n, 
         flag_c => reg_flag_c,
-        instr_out => s_instr,
-        mux_acumulador => s_mux_acc, wr_en_acumulador => s_wr_acc,
-        mux_ula_b => s_mux_ula, selec_op_ula => s_sel_op_ula,
-        wr_en_banco => s_wr_banco,
-        wr_en_flags => s_wr_flags,
-        wr_en_ram => s_wr_ram,
-        mux_banco => s_mux_banco
+        uc_instr_out => s_instr,
+        uc_mux_acumulador_cte => s_mux_acc, uc_wr_en_acumulador => s_wr_acc,
+        uc_mux_ula_banco_ram => s_mux_ula, uc_ula_selec_op => s_sel_op_ula,
+        uc_wr_en_banco => s_wr_banco,
+        uc_wr_en_flags => s_wr_flags,
+        uc_wr_en_ram => s_wr_ram,
+        uc_mux_acumulador_ram => s_mux_banco
     );
 
-    s_dado_banco <= saida_acumulador when s_mux_banco = '0' else s_dado_out_ram;
-	sinal_mux_ula_b <= saida_banco when s_mux_ula = '0' else s_constante_interna;
-	sinal_mux_acumulador <= saida_ula when s_mux_acc = '0' else s_constante_interna;
+    s_dado_banco <= saida_acumulador;
+    sinal_mux_ula_b <= saida_banco when s_mux_ula = '0' else s_constante_interna;
+    sinal_mux_acumulador <= saida_ula when s_mux_acc = '0' else s_constante_interna;
+    s_dado_para_acumulador <= s_dado_out_ram when s_mux_banco = '1' else sinal_mux_acumulador;
 
-    acumulador_ula : reg16bits port map(clk, rst, s_wr_acc, sinal_mux_acumulador, saida_acumulador);
+    acumulador_ula : reg16bits port map(clk, rst, s_wr_acc, s_dado_para_acumulador, saida_acumulador);
     
     banco : banco_regs port map(
         clk, rst, s_wr_banco, 
@@ -122,15 +125,15 @@ begin
         clk => clk,
         endereco => saida_banco(6 downto 0),
         wr_en => s_wr_ram,
-        dado_in => saida_acumulador,
-        dado_out => s_dado_out_ram
+        ram_dado_in => saida_acumulador,
+        ram_dado_out => s_dado_out_ram
     );
 
     ula_processador : ula port map(
-        entrada_a => saida_acumulador, 
-        entrada_b => sinal_mux_ula_b, 
-        selec_op => s_sel_op_ula, 
-        saida => saida_ula, 
+        ula_entrada_acumulador => saida_acumulador, 
+        ula_entrada_banco_ram => sinal_mux_ula_b, 
+        ula_selec_op => s_sel_op_ula, 
+        ula_saida => saida_ula, 
         flag_c => s_flag_c, 
         flag_z => s_flag_z, 
         flag_n => s_flag_n

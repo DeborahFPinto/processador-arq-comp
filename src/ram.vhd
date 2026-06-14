@@ -8,8 +8,8 @@ entity ram is
          clk      : in std_logic;
          endereco : in unsigned(6 downto 0);
          wr_en    : in std_logic;
-         dado_in  : in unsigned(15 downto 0);
-         dado_out : out unsigned(15 downto 0) 
+         ram_dado_in  : in unsigned(15 downto 0);
+         ram_dado_out : out unsigned(15 downto 0) 
    );
 end entity;
 
@@ -21,9 +21,9 @@ begin
    begin
       if rising_edge(clk) then
          if wr_en='1' then
-            conteudo_ram(to_integer(endereco)) <= dado_in;
+            conteudo_ram(to_integer(endereco)) <= ram_dado_in;
          end if;
       end if;
    end process;
-   dado_out <= conteudo_ram(to_integer(endereco));
+   ram_dado_out <= conteudo_ram(to_integer(endereco));
 end architecture;
