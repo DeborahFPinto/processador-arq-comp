@@ -101,7 +101,7 @@ begin
     pc_inc <= reg_pc + 1;
     
     next_pc <= reg_pc + reg_instr(6 downto 0) when (estado_s = "10" and sinal_opcode = "0111") else -- JMP relativo
-               reg_instr(6 downto 0) when (estado_s = "10" and sinal_opcode = "1000" and (flag_z = '1' or flag_c = '1')) else -- BLS relativo
+               reg_instr(6 downto 0) when (estado_s = "10" and sinal_opcode = "1000" and (flag_z = '1' or flag_c = '0')) else
                reg_instr(6 downto 0) when (estado_s = "10" and sinal_opcode = "1001" and flag_n = '1') else -- BMI relativo
                pc_inc when (estado_s = "10") else
                reg_pc; 

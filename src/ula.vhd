@@ -26,7 +26,7 @@ begin
 	
 	-- soma subtração and or
 	soma <= ('0' & ula_entrada_acumulador) + ('0' & ula_entrada_banco_ram);
-	sub <= ('0' & ula_entrada_banco_ram) - ('0' & ula_entrada_acumulador);
+	sub <= ('0' & ula_entrada_acumulador) - ('0' & ula_entrada_banco_ram);
 	s_and <= ula_entrada_acumulador and ula_entrada_banco_ram;
 	s_or <= ula_entrada_acumulador or ula_entrada_banco_ram;
 	
@@ -40,9 +40,9 @@ begin
 	
 	-- CarryOut
 	flag_c <= soma(16) when ula_selec_op = "00" else
-			  sub(16) when ula_selec_op = "01" else
-			  '0';
-	
+          not sub(16) when ula_selec_op = "01" else
+          '0';
+		  
 	-- Zero
 	flag_z <= '1' when saida_interna = x"0000" else '0';
 	
