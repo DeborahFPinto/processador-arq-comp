@@ -31,7 +31,7 @@ architecture a_rom of rom is
         10 => B"1000_000_000000000100", -- BLS 4  - se menor que 32, vai pra 4 (salto condicional absoluto)
 
         -- Preparação Loop 2
-        11 => B"0001_000_000000000010", -- LD 2   - primeiro endereço par (2) no Acc
+        11 => B"0001_000_000000000100", -- LD 4   - primeiro endereço par (4) no Acc
         12 => B"0011_001_000000000000", -- MOV R1
 
         -- Loop 2 RAM[i] = 0 para i par
